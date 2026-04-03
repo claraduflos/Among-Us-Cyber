@@ -1,0 +1,414 @@
+npm init -y
+npm install express socket.io
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="menu">
+  <button onclick="join()">Jouer</button>
+  <button onclick="start()">Start</button>
+</div>
+
+<div id="chatBox"></div>
+<input id="msg"><button onclick="sendMsg()">Envoyer</button>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="game.js"></script>
+<script src="ui.js"></script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="menu">
+  <button onclick="join()">Jouer</button>
+  <button onclick="start()">Start</button>
+</div>
+
+<div id="chatBox"></div>
+<input id="msg"><button onclick="sendMsg()">Envoyer</button>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="game.js"></script>
+<script src="ui.js"></script>
+
+</body>
+</html>
+function join(){
+  socket.emit("joinRoom","room1");
+}
+
+function start(){
+  socket.emit("startGame","room1");
+}
+
+function sendMsg(){
+  socket.emit("chat", msg.value);
+}
+
+socket.on("chat", data=>{
+  chatBox.innerHTML += `<p>${data.id}: ${data.msg}</p>`;
+});
+function join(){
+  socket.emit("joinRoom","room1");
+}
+
+function start(){
+  socket.emit("startGame","room1");
+}
+
+function sendMsg(){
+  socket.emit("chat", msg.value);
+}
+
+socket.on("chat", data=>{
+  chatBox.innerHTML += `<p>${data.id}: ${data.msg}</p>`;
+});
+body{
+  margin:0;
+  background:black;
+  color:cyan;
+  font-family:monospace;
+}
+
+#menu{
+  position:absolute;
+  top:10px;
+  left:10px;
+}
+
+#chatBox{
+  position:absolute;
+  bottom:0;
+  width:250px;
+  height:150px;
+  overflow:auto;
+}
+let currentCode = "";
+
+function openHackTask(){
+  taskHack.style.display = "block";
+
+  currentCode = Math.floor(1000 + Math.random()*9000);
+  code.innerText = "Code: " + currentCode;
+}
+
+function validateHack(){
+  if(answer.value == currentCode){
+    alert("✅ Hack réussi !");
+    taskHack.style.display = "none";
+  } else {
+    alert("❌ Faux !");
+  }
+}
+let currentCode = "";
+
+function openHackTask(){
+  taskHack.style.display = "block";
+
+  currentCode = Math.floor(1000 + Math.random()*9000);
+  code.innerText = "Code: " + currentCode;
+}
+
+function validateHack(){
+  if(answer.value == currentCode){
+    alert("✅ Hack réussi !");
+    taskHack.style.display = "none";
+  } else {
+    alert("❌ Faux !");
+  }
+}
+function openFixTask(){
+  let progress = 0;
+
+  let interval = setInterval(()=>{
+    progress += 10;
+    console.log("Réparation:", progress+"%");
+
+    if(progress >= 100){
+      clearInterval(interval);
+      alert("🖥️ Serveur réparé !");
+    }
+  }, 300);
+}
+if(distance(player, taskZone) < 50){
+  openHackTask();
+}
+if(distance(player, taskZone) < 50){
+  openHackTask();
+}
+if(distance(player, taskZone) < 50){
+  openHackTask();
+}
+function openVote(players){
+
+  voteUI.style.display = "block";
+  playersList.innerHTML = "";
+
+  for(let id in players){
+
+    playersList.innerHTML += `
+      <button onclick="vote('${id}')">
+        Voter ${id}
+      </button>
+    `;
+  }
+}
+
+function vote(id){
+  socket.emit("vote", id);
+}
+socket.on("ejected", id=>{
+  alert("🚀 Joueur éjecté : " + id);
+});
+<div id="voteUI" class="hidden">
+  <h2>🗳️ Réunion</h2>
+  <p id="timer">Temps restant : 30</p>
+  <div id="voteList"></div>
+</div>
+#voteUI{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#111;
+  padding:20px;
+  border:2px solid cyan;
+}
+
+.votePlayer{
+  display:flex;
+  align-items:center;
+  margin:10px;
+}
+
+.votePlayer img{
+  width:40px;
+  margin-right:10px;
+}
+function openVote(players){
+
+  voteUI.classList.remove("hidden");
+
+  let time = 30;
+
+  let countdown = setInterval(()=>{
+    time--;
+    timer.innerText = "Temps restant : " + time;
+
+    if(time <= 0){
+      clearInterval(countdown);
+      voteUI.classList.add("hidden");
+    }
+  },1000);
+
+  voteList.innerHTML = "";
+
+  for(let id in players){
+
+    voteList.innerHTML += `
+      <div class="votePlayer">
+        <img src="avatar.png">
+        <button onclick="vote('${id}')">Voter ${id}</button>
+      </div>
+    `;
+  }
+}
+if(role === "hacker"){
+  socket.emit("sabotage");
+}
+if(role === "hacker"){
+  socket.emit("sabotage");
+}
+function meetingScene(scene){
+
+  let overlay = scene.add.rectangle(0,0,2000,2000,0x000000,0.8)
+    .setOrigin(0);
+
+  let text = scene.add.text(300,200,"📢 RÉUNION !",{
+    font:"40px monospace",
+    fill:"#00ffcc"
+  });
+
+  scene.cameras.main.zoomTo(1.5, 300);
+
+  scene.time.delayedCall(2000, ()=>{
+    overlay.destroy();
+    text.destroy();
+  });
+}
+const SERVERS = {
+  EU: "https://eu-game.up.railway.app",
+  US: "https://us-game.up.railway.app",
+  ASIA: "https://asia-game.up.railway.app"
+};
+
+function getServer(){
+
+  let lang = navigator.language;
+
+  if(lang.includes("fr")) return SERVERS.EU;
+  if(lang.includes("en")) return SERVERS.US;
+
+  return SERVERS.EU;
+}
+
+const socket = io(getServer());
+const SERVERS = {
+  EU: "https://eu-game.up.railway.app",
+  US: "https://us-game.up.railway.app",
+  ASIA: "https://asia-game.up.railway.app"
+};
+
+function getServer(){
+
+  let lang = navigator.language;
+
+  if(lang.includes("fr")) return SERVERS.EU;
+  if(lang.includes("en")) return SERVERS.US;
+
+  return SERVERS.EU;
+}
+
+const socket = io(getServer());
+socket.emit("matchmaking");
+
+socket.on("matchFound", room=>{
+  socket.emit("joinRoom", room);
+});
+<div id="mainMenu">
+  <h1>CYBER CREW</h1>
+
+  <input id="username" placeholder="Pseudo">
+
+  <button onclick="play()">🎮 Jouer</button>
+  <button onclick="openShop()">🛒 Boutique</button>
+</div>
+
+<div id="hud">
+  <p id="roleUI"></p>
+  <p id="xpUI"></p>
+  <p id="levelUI"></p>
+</div>
+body{
+  margin:0;
+  background: radial-gradient(circle, #000, #020024);
+  color:#00ffcc;
+  font-family: 'Orbitron', sans-serif;
+}
+
+#mainMenu{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+}
+
+button{
+  padding:12px;
+  margin:5px;
+  background:linear-gradient(45deg, cyan, blue);
+  border:none;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+button:hover{
+  transform:scale(1.1);
+}
+this.load.spritesheet("player", "sprite.png", {
+  frameWidth: 64,
+  frameHeight: 64
+});
+this.anims.create({
+  key:"idle",
+  frames:this.anims.generateFrameNumbers("player",{start:0,end:3}),
+  frameRate:4,
+  repeat:-1
+});
+
+this.anims.create({
+  key:"walk",
+  frames:this.anims.generateFrameNumbers("player",{start:4,end:7}),
+  frameRate:8,
+  repeat:-1
+});
+
+this.anims.create({
+  key:"death",
+  frames:this.anims.generateFrameNumbers("player",{start:8,end:11}),
+  frameRate:6
+});
+if(player.body.velocity.x !== 0 || player.body.velocity.y !== 0){
+  player.play("walk", true);
+} else {
+  player.play("idle", true);
+}
+socket.on("dead", id=>{
+  if(id === myId){
+    player.play("death");
+  }
+});
+let xp = 0;
+let level = 1;
+function gainXP(amount){
+
+  xp += amount;
+
+  if(xp >= level * 100){
+    xp = 0;
+    level++;
+    alert("🎉 Level UP !");
+  }
+
+  updateUI();
+}
+function gainXP(amount){
+
+  xp += amount;
+
+  if(xp >= level * 100){
+    xp = 0;
+    level++;
+    alert("🎉 Level UP !");
+  }
+
+  updateUI();
+}
+// tâche réussie
+gainXP(20);
+
+// kill imposteur
+gainXP(20);
+
+// victoire
+gainXP(100);
+function showMenu(){
+
+  mainMenu.style.opacity = 0;
+
+  setTimeout(()=>{
+    mainMenu.style.display = "block";
+    mainMenu.style.opacity = 1;
+  },200);
+}
+this.cameras.main.startFollow(player);
+
+this.cameras.main.setLerp(0.1, 0.1);
