@@ -412,3 +412,31 @@ function showMenu(){
 this.cameras.main.startFollow(player);
 
 this.cameras.main.setLerp(0.1, 0.1);
+socket.on("vote", target=>{
+  players[target].votes++;
+
+  checkVotes();
+});
+
+function checkVotes(){
+
+  let max = 0;
+  let eliminated = null;
+
+  for(let id in players){
+    if(players[id].votes > max){
+      max = players[id].votes;
+      eliminated = id;
+    }
+  }
+
+  if(max >= 2){
+    players[eliminated].alive = false;
+    io.emit("ejected", eliminated);
+
+    // reset votes
+    for(let id in players){
+      players[id].votes = 0;
+    }
+  }
+}
